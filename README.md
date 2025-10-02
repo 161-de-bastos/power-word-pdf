@@ -2,10 +2,10 @@
 
 7th-level enchantment
 
-Casting Time: 1 action
-Range: Work environment
-Components: Page Stream Segmentation and Layout-Aware Content Retrieval.
-Duration: Instantaneous
+- Casting Time: 1 action
+- Range: Work environment
+- Components: Page Stream Segmentation and Layout-Aware Content Retrieval.
+- Duration: Instantaneous
 
 You speak a word of power that causes waves of intense pain to assail one PDF you can see within range. If the Document has 100 hit points or fewer, it is subject to crippling pain. Otherwise, the spell has no effect on it. A Document is also unaffected if it is a single page.
 
