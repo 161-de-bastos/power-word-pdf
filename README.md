@@ -1,2 +1,14 @@
-# power-word-pdf
-Reimplementation of SotA AI models on PDF processing tasks, presented as an API. Main focus on Page Stream Segmentation and Layout-Aware Content Retrieval.
+# Power Word: PDF
+
+7th-level enchantment
+
+Casting Time: 1 action
+Range: Work environment
+Components: Page Stream Segmentation and Layout-Aware Content Retrieval.
+Duration: Instantaneous
+
+You speak a word of power that causes waves of intense pain to assail one PDF you can see within range. If the Document has 100 hit points or fewer, it is subject to crippling pain. Otherwise, the spell has no effect on it. A Document is also unaffected if it is a single page.
+
+While the Document is affected by crippling pain, any speed it has can be no higher than 10 feet. The Document also has disadvantage on attack rolls, ability checks, and saving throws, other than Constitution saving throws. Finally, if the Document tries to cast a spell, it must first succeed on a Constitution saving throw, or the casting fails and the spell is wasted.
+
+A Document suffering this pain can make a Constitution saving throw at the end of each of its turns. On a successful save, the pain ends.
