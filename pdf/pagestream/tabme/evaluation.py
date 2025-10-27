@@ -182,11 +182,11 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 
-from utils.dataset import TABME
-from utils.model import PDFSegmentationModel
-from utils.config import config
+from ..dataset import TABME
+from .model import PDFSegmentationModel
+from .config import config
 
-def pred (path_data, path_model_folder, path_csv='results', batch_size=12, path_cache_folder=None, num_hidden_features=None, ablation=None):
+def predict (path_data, path_model_folder, path_csv='results', batch_size=12, path_cache_folder=None, num_hidden_features=None, ablation=None):
     '''get predictions from the model'''
     
     path_model_folder = Path(path_model_folder)
@@ -251,93 +251,3 @@ def pred (path_data, path_model_folder, path_csv='results', batch_size=12, path_
         df.to_csv(f'{path_csv}_full.csv')
     
     return df
-
-
-def predict(path_data, path_model_folder, path_csv = './predictions/test.csv', batch_size=64, path_cache_folder=None, num_hidden_features=None, ablation=None):
-    '''get predictions from the model'''
-    
-    path_model_folder = Path(path_model_folder)
-    path_csv = Path(path_csv)
-
-    device_str = 'cuda' if torch.cuda.is_available() else 'cpu'
-    device = torch.device(device_str)
-    print("device:", device_str)
-
-    # config
-    input_img_size = config['input_img_size']
-    max_seq_length = config['max_seq_length']
-
-    test_dataset = TABME(path_data=path_data, path_cache_folder=path_cache_folder, ablation=ablation, max_seq_length=max_seq_length, input_img_size=input_img_size)
-    df = pd.read_csv(path_csv)
-    print("# test dataset:", len(test_dataset))
-
-    # model
-    path_model_config = path_model_folder/"model_config.json"
-    if path_model_config.exists():
-        model_config = json.load(open(path_model_config, "r"))
-        num_hidden_features = model_config["num_hidden_features"] 
-        ablation = model_config["ablation"]
-
-    # load model weights
-    model = PDFSegmentationModel(num_hidden_features=num_hidden_features, pretrained_weights=False)
-    model.load_state_dict(torch.load(path_model_folder/"best"/"model_weights.pt", map_location=device))
-    model = model.to(device)
-    model.eval()
-
-
-    for folder_id in tqdm(df.folder_id.unique(), desc="Generating predictions"):
-        df_folder = df[df.folder_id==folder_id]
-        stems = df_folder.stem.to_list()
-        def stem_to_index(stem):
-            index = np.where(test_dataset.page_ids==stem)
-            return index[0][0]
-        indices = map(stem_to_index, stems)
-
-        sampler = torch.utils.data.BatchSampler(indices, batch_size=batch_size, drop_last=False)
-        dataloader = DataLoader(test_dataset, batch_sampler=sampler)
-
-        all_labels = []
-        all_logits = []
-        all_stems = []
-      
-        for dataset in dataloader:
-
-
-            inputs, image, labels, stems = dataset
-
-            input_ids = inputs['input_ids'].to(device)
-            bbox = inputs['bbox'].to(device)
-            attention_mask = inputs['attention_mask'].to(device)
-            token_type_ids = inputs['token_type_ids'].to(device)
-            labels = labels.to(device)
-            image = image.to(device)
-
-            with torch.no_grad():
-                outputs = model(input_ids=input_ids, bbox=bbox, attention_mask=attention_mask, token_type_ids=token_type_ids, image=image)
-            
-            # the first index is always the cut point
-            labels[0]=1
-            
-            all_logits += [outputs]
-            all_labels += [labels]
-            all_stems += stems
-            # break
-          
-        all_logits = torch.cat(all_logits).detach().cpu().numpy()
-        all_labels = torch.cat(all_labels).detach().cpu().numpy()
-        all_logits_dict = dict(zip(all_stems, all_logits))
-
-        # save predictions
-        for i in range(2):
-            df.loc[df_folder.index, f'logits_{i}']=df_folder['stem'].map(lambda stem: all_logits_dict[stem][i])
-        df.loc[df_folder.index, 'prediction']=df_folder['stem'].map(lambda stem: np.argmax(all_logits_dict[stem]))
-
-        if ablation == 'resnet':
-            df.to_csv(path_csv.parent/f'minus_resnet_predictions_{path_csv.stem}.csv')        
-        elif ablation == 'layoutlm':
-            df.to_csv(path_csv.parent/f'minus_layoutlm_predictions_{path_csv.stem}.csv')
-        else: 
-            df.to_csv(path_csv.parent/f'full_model_predictions_{path_csv.stem}.csv')
-    
-    return df
-

@@ -1,11 +1,6 @@
-from utils.train import train
-from utils.evaluation import pred
-from utils.dataset import TABME
-from utils.config import config
-
 import argparse
-import pandas as pd
-from pathlib import Path
+
+from .tabme.evaluation import predict
 
 if __name__ == '__main__':
 
@@ -34,4 +29,4 @@ if __name__ == '__main__':
     else:
         num_hidden_features = None
     
-    df = pred(path_data, path_model_folder, path_csv, batch_size=64, path_cache_folder=path_cache_folder, num_hidden_features=num_hidden_features, ablation=ablation)
+    df = predict(path_data, path_model_folder, path_csv, batch_size=64, path_cache_folder=path_cache_folder, num_hidden_features=num_hidden_features, ablation=ablation)

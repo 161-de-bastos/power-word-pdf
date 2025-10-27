@@ -4,6 +4,9 @@
 *.jpg
 *.tsv
 *.pt
+tmp/
+cache/
+inputs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
