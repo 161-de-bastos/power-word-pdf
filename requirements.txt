@@ -9,3 +9,4 @@ tqdm==4.62.3
 transformers==4.15.0
 h5py==3.6.0
 umap-learn==0.5.3
+img2pdf

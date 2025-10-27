@@ -39,14 +39,18 @@ pdf2jpg() {
   local src_pdf_dir="$1"
   local dst_jpg_dir="$2"
   local dpi="${3:-150}"
-  local resize="${4:-1000x1000}"
+  local resize="${4:-}"
 
   mkdir -p "$dst_jpg_dir"
   while IFS= read -r -d '' pdf; do
     local base
     base="$(basename "$pdf")"
     base="${base%.*}"
-    magick -density "${dpi}" "$pdf" -resize "${resize}" "${dst_jpg_dir}/${base}-%d.jpg"
+    if [[ -n "$resize" ]]; then
+      magick -density "${dpi}" "$pdf" -resize "${resize}" "${dst_jpg_dir}/${base}-%d.jpg"
+    else
+      magick -density "${dpi}" "$pdf" "${dst_jpg_dir}/${base}-%d.jpg"
+    fi
   done < <(find "$src_pdf_dir" -type f -name '*.pdf' -print0)
 }
 
@@ -80,4 +84,16 @@ predict() {
   [[ -f "${predict_py}" ]] || die "predict script not found at ${predict_py}"
   activate_venv "${venv}"
   python3 "${predict_py}" --data "${data_dir}" --model "${model_path}" --csv "${out_csv}"
+}
+
+merge() {
+  local merge_py="$1"
+  local csv="$2"
+  local jpg_dir="$3"
+  local out_dir="$4"
+  local venv="${5:-}"
+
+  [[ -f "${merge_py}" ]] || die "predict script not found at ${merge_py}"
+  activate_venv "${venv}"
+  python3 "${merge_py}" --csv "${csv}" --jpg-dir "${jpg_dir}" --out-dir "${out_dir}"
 }
