@@ -1,0 +1,1 @@
+To download the weights: https://drive.google.com/file/d/1FDUDfXTastwDnKSf5p0if9YloFKSMGq3/view?usp=sharing
