@@ -17,7 +17,7 @@ USAGE
 TMP_DIR=tmp
 OUT_CSV=results
 PREDICT=predict.py
-VENV=""
+VENV=".venv"
 DPI=150
 RESIZE=1000x1000
 OCR_LANG="spa+eng"

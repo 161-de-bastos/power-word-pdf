@@ -13,7 +13,7 @@ USAGE
 }
 
 DPI=150
-VENV=""
+VENV=".venv"
 TMP_DIR=tmp
 MERGE_PY=merge.py
 OUT_DIR=outputs
