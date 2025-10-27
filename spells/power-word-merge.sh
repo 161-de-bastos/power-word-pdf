@@ -42,7 +42,7 @@ mkdir -p "${TMP_DIR}" "${OUT_DIR}"
 jpg_dir="${TMP_DIR}/jpg"
 mkdir -p "${jpg_dir}"
 
-trap 'cleanup_tmp "${TMP_DIR}"' ERR INT TERM
+trap 'cleanup "${TMP_DIR}"' ERR INT TERM
 
 echo "[merge] Render PDFs to JPG (original PDFs remain untouched)"
 pdf2jpg "${PDF_DIR}" "${jpg_dir}" "${DPI}"

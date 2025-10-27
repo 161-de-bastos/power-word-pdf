@@ -62,7 +62,7 @@ work_dir="${TMP_DIR}/work"
 jpg_dir="${TMP_DIR}/jpg"
 mkdir -p "${work_dir}" "${jpg_dir}"
 
-trap 'cleanup_tmp "${TMP_DIR}"' ERR INT TERM
+trap 'cleanup "${TMP_DIR}"' ERR INT TERM
 
 echo "[segment] Copy PDFs to tmp/work"
 rsync -a --include='*/' --include='*.pdf' --exclude='*' "${PDF_DIR}/" "${work_dir}/"
