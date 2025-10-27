@@ -14,6 +14,7 @@ USAGE
 
 DPI=150
 RESIZE=1000x1000
+TMP_DIR=tmp
 
 [[ "${1:-}" == "merge" ]] && shift || true
 
@@ -35,12 +36,13 @@ require_cmd python3
 
 [[ -n "${PDF_DIR:-}" ]] || die "--pdf-dir is required"
 [[ -n "${CSV_IN:-}"  ]] || die "--csv is required"
-[[ -n "${TMP_DIR:-}" ]] || die "--tmp-dir is required"
 [[ -n "${OUT_DIR:-}" ]] || die "--out-dir is required"
 
 mkdir -p "${TMP_DIR}" "${OUT_DIR}"
 jpg_dir="${TMP_DIR}/jpg"
 mkdir -p "${jpg_dir}"
+
+trap 'cleanup_tmp "${TMP_DIR}"' ERR INT TERM
 
 echo "[merge] Render PDFs to JPG (original PDFs remain untouched)"
 pdf2jpg "${PDF_DIR}" "${jpg_dir}" "${DPI}" "${RESIZE}"
@@ -50,6 +52,6 @@ echo "[merge] Group pages from CSV and create merged PDFs"
 
 echo "[merge] Cleanup tmp"
 cleanup "${TMP_DIR}"
-cleanup cache/
+cleanup "cache"
 
 echo "[merge] Done. Output PDFs at: ${OUT_DIR}"

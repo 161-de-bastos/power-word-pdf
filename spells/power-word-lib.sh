@@ -78,7 +78,6 @@ predict() {
   local venv="${5:-}"
 
   [[ -f "${predict_py}" ]] || die "predict script not found at ${predict_py}"
-  [[ -f "${model_path}" ]] || die "model weights not found at ${model_path}"
-  activate_venv_if_any "${venv}"
+  activate_venv "${venv}"
   python3 "${predict_py}" --data "${data_dir}" --model "${model_path}" --csv "${out_csv}"
 }

@@ -1,6 +1,5 @@
 import argparse
-
-from .tabme.evaluation import predict
+from pdf.pagestream.tabme.evaluation import predict
 
 if __name__ == '__main__':
 

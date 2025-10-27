@@ -16,12 +16,13 @@ USAGE
 
 TMP_DIR=tmp
 OUT_CSV=results
-PREDICT=pdf/pagestream/predict.py
+PREDICT=predict.py
 VENV=""
 DPI=150
 RESIZE=1000x1000
 OCR_LANG="spa+eng"
 OCR_FILTER="pdf/utils/ocr_filter.awk"
+MODEL="pdf/pagestream/tabme/model_weights/full"
 
 PP_DPI=150
 PP_RESIZE=1030x1030
@@ -55,12 +56,13 @@ require_cmd magick
 require_cmd python3
 
 [[ -n "${PDF_DIR:-}" ]] || die "--pdf-dir is required"
-[[ -n "${MODEL:-}"   ]] || die "--model is required"
 
 mkdir -p "${TMP_DIR}"
 work_dir="${TMP_DIR}/work"
 jpg_dir="${TMP_DIR}/jpg"
 mkdir -p "${work_dir}" "${jpg_dir}"
+
+trap 'cleanup_tmp "${TMP_DIR}"' ERR INT TERM
 
 echo "[segment] Copy PDFs to tmp/work"
 rsync -a --include='*/' --include='*.pdf' --exclude='*' "${PDF_DIR}/" "${work_dir}/"
@@ -79,6 +81,6 @@ predict "${PREDICT}" "${jpg_dir}" "${MODEL}" "${OUT_CSV}" "${VENV}"
 
 echo "[segment] Cleanup tmp"
 cleanup "${TMP_DIR}"
-cleanup cache
+cleanup "cache"
 
 echo "[segment] Done. CSV at: ${OUT_CSV}"
