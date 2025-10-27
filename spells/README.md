@@ -12,27 +12,3 @@ You speak a word of power that causes waves of intense pain to assail one PDF yo
 While the Document is affected by crippling pain, any speed it has can be no higher than 10 feet. The Document also has disadvantage on attack rolls, ability checks, and saving throws, other than Constitution saving throws. Finally, if the Document tries to cast a spell, it must first succeed on a Constitution saving throw, or the casting fails and the spell is wasted.
 
 A Document suffering this pain can make a Constitution saving throw at the end of each of its turns. On a successful save, the pain ends.
-
-# CLI usage
-
-```
-SEGMENT: preprocess, predicts and exports results.
-./powerword.sh segment \
-  --pdf-dir \
-  --tmp-dir \
-  --out-csv \
-  --model \
-  --predict ./predict.py \
-  --venv ./.venv \
-  --dpi 150 --resize 1000x1000 \
-  --ocr-lang spa+eng \
-  --ocr-filter 
-
-MERGE: renders, groups by sequences and joins images as PDF (requires results.csv from SEGMENT). 
-./powerword.sh merge \
-  --pdf-dir \
-  --csv \
-  --tmp-dir \
-  --out-dir \
-  --dpi 150 --resize 1000x1000
-```

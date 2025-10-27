@@ -1,3 +1,14 @@
+# Convenience
+*.pdf
+*.csv
+*.jpg
+*.tsv
+*.pt
+tmp/
+cache/
+inputs/
+outputs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
