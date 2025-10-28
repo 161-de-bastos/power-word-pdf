@@ -71,7 +71,7 @@ pdf2jpg() {
   mkdir -p "$dst_jpg_dir"
 
   local total i=0 start_ts
-  total=$(find "$scr_pdf_dir" -type f -name '*.pdf' -print0 | tr -cd '\0' | wc -c)
+  total=$(find "$src_pdf_dir" -type f -name '*.pdf' -print0 | tr -cd '\0' | wc -c)
   start_ts=$(date +%s)
   disable_cursor
 

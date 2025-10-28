@@ -219,7 +219,7 @@ def predict (path_data, path_model_folder, path_csv='results', batch_size=12, pa
     all_logits = []
     all_stems = []
 
-    for dataset in dataloader:
+    for dataset in tqdm(dataloader):
         inputs, image, stems = dataset
 
         input_ids = inputs['input_ids'].to(device)
